@@ -1,18 +1,21 @@
 const User = require('../models/user');
+const Role = require('../models/role');
 
 //TODO: Listar usuarios */
 const getUsers = async (req, res) => {
-  User.find()
-    .then((data) => res.send(data))
-    .catch((error) => res.json(error));
+  User.find({}, (err, users) => {
+    Role.populate(users, { path: 'role' }, (err, users) => {
+      res.status(200).send(users);
+    });
+  });
 };
 
-/* TODO: Listar un usuario */
+//TODO: Listar un usuario */
 
 //TODO: Crear un usuario */
 const createUser = async (req, res) => {
   try {
-    const { user_name, user_password, user_level, turno, user_status } =
+    const { user_name, user_password, role, user_workshift, user_status } =
       req.body;
     const user = await User.findOne({ user_name: user_name });
     if (user) return res.status(400).json({ message: 'El usuario ya existe.' });
@@ -20,8 +23,8 @@ const createUser = async (req, res) => {
     const newUser = await User({
       user_name: user_name,
       user_password: user_password,
-      user_level: user_level,
-      turno: turno,
+      role: role,
+      user_workshift: user_workshift,
       user_status: user_status,
     });
     //TODO: Añadir validaciones de campos*/
@@ -32,8 +35,8 @@ const createUser = async (req, res) => {
   }
 };
 
-/* TODO: Actualizazr usuario */
+//TODO: Actualizar usuario */
 
-/* TODO: ELiminar usuario */
+//TODO: ELiminar usuario */
 
 module.exports = { getUsers, createUser };
