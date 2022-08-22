@@ -11,14 +11,14 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ user_name: user_name });
 
     if (!user)
-      return res.status(400).json({ message: 'El usuario no existe.' });
+      return res.status(400).send({ message: 'El usuario no existe.' });
 
     const validPassword = await bcrypt.compare(
       user_password,
       user.user_password
     );
     if (!validPassword)
-      return res.status(400).json({ message: 'Contraseña incorrecta.' });
+      return res.status(400).send({ message: 'Contraseña incorrecta.' });
     const role = await Role.findById(user.role);
     token = await tokenSign(user);
     res.status(200).send({
