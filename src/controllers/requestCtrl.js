@@ -13,6 +13,16 @@ const getRequestsByStatus = async (req, res) => {
   });
 };
 
+const getRequestById = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  Request.find({_id:id},(err,requests) => {
+    Table.populate(requests,{path: 'table'},(err,requests) => {
+      res.status(200).send(requests);
+    })
+  });
+};
+
 const getRequestsByTable = async (req, res) => {
   const { id } = req.params;
   Request.find({request_status:"En proceso"},(err,requests) => {
@@ -85,4 +95,4 @@ const createRequest = async (req, res) => {
   }
 };
 
-module.exports = { getRequestsByStatus, getTablesByStatus, getRequestsByTable, createRequest };
+module.exports = { getRequestById, getRequestsByStatus, getTablesByStatus, getRequestsByTable, createRequest };
