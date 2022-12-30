@@ -9,7 +9,10 @@ const app = express();
 const port = process.env.PORT || 5001;
 
 /* TODO: MIDDLEWARES */
-app.use(cors());
+app.use(cors({
+  credentials: true, 
+  origin: true
+}));
 app.use(express.json());
 /* TODO: Rutas o peticiones http */
 app.use('/api/v1', require('./src/routes'));
