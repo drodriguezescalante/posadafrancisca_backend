@@ -1,0 +1,9 @@
+const filterUniqueArray = async (originalArray,prop) => {
+	var newArray = [];
+    var lookupObject  = {};
+    for(var i in originalArray) { lookupObject[originalArray[i][prop]] = originalArray[i]; }
+     for(i in lookupObject) { newArray.push(lookupObject[i]); }
+    return JSON.stringify( newArray );
+}
+
+module.exports = { 	filterUniqueArray };

@@ -19,13 +19,12 @@ const loginUser = async (req, res) => {
     );
     if (!validPassword)
       return res.status(400).send({ message: 'Contraseña incorrecta.' });
-    const role = await Role.findById(user.role);
+    
     token = await tokenSign(user);
     res.status(200).send({
       token: token,
-      estado: user.user_status,
-      role: role.role_type,
-      role_name: role.role_name,
+      status: user.user_status,
+      userId: user._id,
       message: 'Inicio de session exitosa.',
     });
   } catch (error) {
