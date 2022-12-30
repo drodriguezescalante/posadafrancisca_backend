@@ -1,23 +1,27 @@
-const express = require('express');
-require('dotenv').config();
-const cors = require('cors');
-/* TODO: Coneccion base de datos*/
-const Connection = require('./src/config/db');
+const epxress = require('express');
+const router = epxress.Router();
+const fs = require('fs');
 
-const app = express();
-/* TODO: variable de entorno del puerto */
-const port = process.env.PORT || 5001;
+const pathRouter = `${__dirname}`;
 
-/* TODO: MIDDLEWARES */
-app.use(cors({
-  credentials: true, 
-  origin: true
-}));
-app.use(express.json());
-/* TODO: Rutas o peticiones http */
-app.use('/api/v1', require('./src/routes'));
-/* TODO: LLamar a la coneccion de BD */
-Connection(port);
-app.listen(port, () =>
-  console.log('El servidor esta encendido en el puerto:', port)
-);
+const removeExtension = (fileName) => {
+  return fileName.split('.').shift();
+};
+
+fs.readdirSync(pathRouter).filter((file) => {
+  const fileWithOutExt = removeExtension(file);
+  const skip = ['index'].includes(fileWithOutExt);
+  if (!skip) {
+    router.use(`/${fileWithOutExt}`, require(`./${fileWithOutExt}`));
+    console.log('CARGAR RUTA ---->', fileWithOutExt);
+  }
+});
+
+router.get('*', (req, res) => {
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.status(404);
+  res.send({ error: 'Not found' });
+});
+
+module.exports = router;
