@@ -8,6 +8,7 @@ const { tokenSign } = require('../helpers/generateToken');
 const loginUser = async (req, res) => {
   try {
     const { user_name, user_password } = req.body;
+    console.log(user_name);
     const user = await User.findOne({ user_name: user_name });
 
     if (!user)
@@ -44,6 +45,7 @@ const verifyCtrl = async (req, res) => {
       return res.send(true);
     });
   } catch (err) {
+    console.log("error");
     return res.status(500).json({
       msg: err.message,
     });

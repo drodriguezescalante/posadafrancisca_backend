@@ -15,7 +15,6 @@ const getRequestsByStatus = async (req, res) => {
 
 const getRequestById = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   Request.find({_id:id},(err,requests) => {
     Table.populate(requests,{path: 'table'},(err,requests) => {
       res.status(200).send(requests);
@@ -58,8 +57,9 @@ const createRequest = async (req, res) => {
         table,
         order_structure,
         request_status,
+        request_detail,
         create_user,
-        create_date,
+        create_date, 
         last_audit_user,
         audit_date,
     } = req.body;
@@ -68,6 +68,7 @@ const createRequest = async (req, res) => {
         table:table,
         order_structure:order_structure,
         request_status:defaultStatus,
+        request_detail: request_detail,
         create_user: create_user,
         create_date:create_date,
         last_audit_user:last_audit_user,
@@ -94,5 +95,28 @@ const createRequest = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+const updateRequest = async (req, res) => {
+  console.log("id: "+req.params.id);
+};
 
-module.exports = { getRequestById, getRequestsByStatus, getTablesByStatus, getRequestsByTable, createRequest };
+/*
+const updateRequest = async (req,res) => {
+  try{
+    console.log("abc");
+  }catch(e){
+    console.log(e);
+  }
+  Request.findByIdAndUpdate(req.params.id,{
+    table           : table,
+    request_detail  : request_detail,
+    request_detail  : req.body.request_detail,
+    last_audit_user : req.body.last_audit_user,
+    audit_date      : new Date()
+  }, function(err,response){
+    if (err) return handleError(err);
+    res.send(response);
+  })
+}
+*/
+
+module.exports = { getRequestById, getRequestsByStatus, getTablesByStatus, getRequestsByTable, createRequest,updateRequest };
